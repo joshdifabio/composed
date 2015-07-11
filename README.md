@@ -26,18 +26,39 @@ $absoluteProjectPath = ComposerUtils\BASE_DIR;
 
 ```php
 $requires = ComposerUtils\package_config('phpunit/phpunit', 'require');
+
+assert($requires === [
+    'ext-dom' => '*',
+    'ext-json' => '*',
+    'ext-pcre' => '*',
+    'ext-reflection' => '*',
+    'ext-spl' => '*',
+    'php' => '>=5.3.3',
+    'phpspec/prophecy' => '~1.3,>=1.3.1',
+    'phpunit/php-code-coverage' => '~2.1',
+    // ...
+]);
 ```
 
 ### Get the PHP version requirement for a specific package
 
 ```php
 $phpRequirement = ComposerUtils\package_config('phpunit/phpunit', ['require', 'php']);
+
+assert($phpRequirement === '>=5.3.3');
 ```
 
 ### Get the PHP version requirement for all installed packages
 
 ```php
-$valuesByPackage = ComposerUtils\package_configs(['require', 'php']);
+$phpRequires = ComposerUtils\package_configs(['require', 'php']);
+
+assert($phpRequires === [
+  'joshdifabio/composer-utils' => '>=5.3',
+  'doctrine/instantiator' => '>=5.3,<8.0-DEV',
+  'phpdocumentor/reflection-docblock' => '>=5.3.3',
+  // ...
+]);
 ```
 
 ### Get the absolute path to a file in a package
@@ -59,6 +80,13 @@ foreach (ComposerUtils\packages() as $packageName => $package) {
 
 ```php
 $projectAuthors = ComposerUtils\project_config('authors');
+
+assert($projectAuthors === [
+    [
+        'name' => 'Josh Di Fabio',
+        'email' => 'joshdifabio@somewhere.com',
+    ],
+]);
 ```
 
 ## Installation
