@@ -27,9 +27,9 @@ $absoluteProjectPath = ComposerUtils\BASE_DIR;
 You can fetch data from the `composer.json` file of a specific package.
 
 ```php
-$requires = ComposerUtils\package_config('phpunit/phpunit', 'authors');
+$authors = ComposerUtils\package_config('phpunit/phpunit', 'authors');
 
-assert($requires === [
+assert($authors === [
     [
         'name' => "Sebastian Bergmann",
         'email' => "sebastian@phpunit.de",
@@ -43,9 +43,9 @@ assert($requires === [
 You can fetch data from all `composer.json` files in your project in one go.
 
 ```php
-$phpRequires = ComposerUtils\package_configs('license');
+$licenses = ComposerUtils\package_configs('license');
 
-assert($phpRequires === [
+assert($licenses === [
   'joshdifabio/composer-utils' => "MIT",
   'doctrine/instantiator' => "MIT",
   'phpunit/php-code-coverage' => "BSD-3-Clause",
@@ -67,7 +67,7 @@ foreach (ComposerUtils\packages() as $packageName => $package) {
 }
 ```
 
-### Get a value from your project's Composer config
+### Get data from your project's Composer config
 
 You can also fetch data from the `composer.json` file located in your project root.
 
