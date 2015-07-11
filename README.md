@@ -30,9 +30,11 @@ You can fetch anything from the `composer.json` file of a package, for example a
 $requires = ComposerUtils\package_config('phpunit/phpunit', 'authors');
 
 assert($requires === [
-    'name' => "Sebastian Bergmann",
-    'email' => "sebastian@phpunit.de",
-    'role' => "lead",
+    [
+        'name' => "Sebastian Bergmann",
+        'email' => "sebastian@phpunit.de",
+        'role' => "lead",
+    ],
 ]);
 ```
 
