@@ -22,42 +22,29 @@ $absoluteVendorPath = ComposerUtils\VENDOR_DIR;
 $absoluteProjectPath = ComposerUtils\BASE_DIR;
 ```
 
-### Get the requirements for a specific package
+### Get the authors of a specific package
+
+You can fetch anything from the `composer.json` file of a package, for example authors.
 
 ```php
-$requires = ComposerUtils\package_config('phpunit/phpunit', 'require');
+$requires = ComposerUtils\package_config('phpunit/phpunit', 'authors');
 
 assert($requires === [
-    'ext-dom' => '*',
-    'ext-json' => '*',
-    'ext-pcre' => '*',
-    'ext-reflection' => '*',
-    'ext-spl' => '*',
-    'php' => '>=5.3.3',
-    'phpspec/prophecy' => '~1.3,>=1.3.1',
-    'phpunit/php-code-coverage' => '~2.1',
-    // ...
+    'name' => "Sebastian Bergmann",
+    'email' => "sebastian@phpunit.de",
+    'role' => "lead",
 ]);
 ```
 
-### Get the PHP version requirement for a specific package
+### Get licenses of all installed packages
 
 ```php
-$phpRequirement = ComposerUtils\package_config('phpunit/phpunit', ['require', 'php']);
-
-assert($phpRequirement === '>=5.3.3');
-```
-
-### Get the PHP version requirement for all installed packages
-
-```php
-$phpRequires = ComposerUtils\package_configs(['require', 'php']);
+$phpRequires = ComposerUtils\package_configs('license');
 
 assert($phpRequires === [
-  'joshdifabio/composer-utils' => '>=5.3',
-  'doctrine/instantiator' => '>=5.3,<8.0-DEV',
-  'phpdocumentor/reflection-docblock' => '>=5.3.3',
-  // ...
+  'joshdifabio/composer-utils' => "MIT",
+  'doctrine/instantiator' => "MIT",
+  'phpunit/php-code-coverage' => "BSD-3-Clause",
 ]);
 ```
 
