@@ -1,6 +1,6 @@
 {
     "name": "joshdifabio/composer-utils",
-    "description": "Easily parse the Composer config of your project and its dependencies at runtime.",
+    "description": "Easily parse your project's Composer configuration, and those of its dependencies, at runtime.",
     "keywords": [ "composer", "dependency", "package" ],
     "license": "MIT",
     "authors": [
