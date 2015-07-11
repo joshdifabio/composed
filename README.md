@@ -97,6 +97,10 @@ Install Composer Utils using [composer](https://getcomposer.org/).
 composer require joshdifabio/composer-utils
 ```
 
+## Credits
+
+Credit goes to @igorw whose [get-in](https://github.com/igorw/get-in) library is partially copied into this library. Unfortunately, `igorw/get-in` requires PHP 5.4 while Composer Utils aims for PHP 5.3 compatibility.
+
 ## License
 
 Composer Utils is released under the [MIT](https://github.com/joshdifabio/composer-utils/blob/master/LICENSE) license.
