@@ -50,7 +50,7 @@ $path = ComposerUtils\package('phpunit/phpunit')->getPath('composer.json');
 
 ```php
 foreach (ComposerUtils\packages() as $packageName => $package) {
-    $pathToPackageConfig = $package->getPath('composer.json);
+    $pathToPackageConfig = $package->getPath('composer.json');
     // ...
 }
 ```
