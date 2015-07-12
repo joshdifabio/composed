@@ -1,5 +1,7 @@
 # Composer Utils
 
+[![Code Quality](https://img.shields.io/scrutinizer/g/joshdifabio/composer-utils.svg?style=flat-square)](https://scrutinizer-ci.com/g/joshdifabio/composer-utils/)
+
 ## Introduction
 
 This library provides a set of utility functions designed to help you parse your project's Composer configuration at runtime.
