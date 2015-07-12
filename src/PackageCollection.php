@@ -44,8 +44,6 @@ class PackageCollection implements \IteratorAggregate
      */
     public function getConfig($keys = array(), $default = null)
     {
-        $config = array();
-
         if (2 > func_num_args()) {
             $default = new \stdClass;
         }
