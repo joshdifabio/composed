@@ -6,26 +6,12 @@ namespace ComposerUtils;
  */
 class LockFile
 {
-    private static $instance;
-    
     private $json;
     private $packages;
 
     public function __construct(JsonObject $json)
     {
         $this->json = $json;
-    }
-
-    /**
-     * @return LockFile
-     */
-    public static function getInstance()
-    {
-        if (null === self::$instance) {
-            self::$instance = self::createFromPath(BASE_DIR . DIRECTORY_SEPARATOR . 'composer.lock');
-        }
-
-        return self::$instance;
     }
 
     /**
