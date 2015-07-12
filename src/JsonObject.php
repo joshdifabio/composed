@@ -50,22 +50,24 @@ class JsonObject
      */
     public function get($keys = array(), $default = null)
     {
-        $array = $this->data;
-
         if (!is_array($keys)) {
             $keys = array($keys);
         }
         
         if (!$keys) {
-            return $array;
+            return $this->data;
         }
 
         // This is a micro-optimization, it is fast for non-nested keys, but fails for null values
-        if (count($keys) === 1 && isset($array[$keys[0]])) {
-            return $array[$keys[0]];
+        if (count($keys) === 1 && isset($this->data[$keys[0]])) {
+            return $this->data[$keys[0]];
         }
 
-        $current = $array;
+        return $this->deepGet($this->data, $keys, $default);
+    }
+
+    private function deepGet(array $current, array $keys = array(), $default = null)
+    {
         foreach ($keys as $key) {
             if (!is_array($current) || !array_key_exists($key, $current)) {
                 return $default;
