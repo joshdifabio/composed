@@ -58,11 +58,6 @@ class JsonObject
             return $this->data;
         }
 
-        // This is a micro-optimization, it is fast for non-nested keys, but fails for null values
-        if (count($keys) === 1 && isset($this->data[$keys[0]])) {
-            return $this->data[$keys[0]];
-        }
-
         return $this->deepGet($this->data, $keys, $default);
     }
 
