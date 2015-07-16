@@ -1,5 +1,5 @@
 <?php
-namespace ComposerUtils;
+namespace Composed;
 
 define(__NAMESPACE__ . '\VENDOR_DIR', Internal\findVendorDir());
 define(__NAMESPACE__ . '\BASE_DIR', Internal\findBaseDir(VENDOR_DIR));

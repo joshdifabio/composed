@@ -1,5 +1,5 @@
 <?php
-namespace ComposerUtils\Internal;
+namespace Composed\Internal;
 
 function findVendorDir()
 {

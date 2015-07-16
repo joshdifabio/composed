@@ -1,5 +1,5 @@
 {
-    "name": "joshdifabio/composer-utils",
+    "name": "joshdifabio/composed",
     "description": "Easily parse your project's Composer configuration, and those of its dependencies, at runtime.",
     "keywords": [ "composer", "dependency", "package" ],
     "license": "MIT",
@@ -14,7 +14,7 @@
     },
     "autoload": {
         "psr-4": {
-            "ComposerUtils\\": "src"
+            "Composed\\": "src"
         },
         "files": [
             "src/functions_include.php"

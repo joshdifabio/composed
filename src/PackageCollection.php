@@ -1,5 +1,5 @@
 <?php
-namespace ComposerUtils;
+namespace Composed;
 
 class PackageCollection implements \IteratorAggregate
 {

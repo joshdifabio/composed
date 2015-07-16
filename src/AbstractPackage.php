@@ -1,5 +1,5 @@
 <?php
-namespace ComposerUtils;
+namespace Composed;
 
 /**
  * @author Josh Di Fabio <joshdifabio@gmail.com>

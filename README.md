@@ -1,6 +1,6 @@
-# Composer Utils
+# Composed
 
-[![Code Quality](https://img.shields.io/scrutinizer/g/joshdifabio/composer-utils.svg?style=flat-square)](https://scrutinizer-ci.com/g/joshdifabio/composer-utils/)
+[![Code Quality](https://img.shields.io/scrutinizer/g/joshdifabio/composed.svg?style=flat-square)](https://scrutinizer-ci.com/g/joshdifabio/composed/)
 
 This library provides a set of utility functions designed to help you parse your project's Composer configuration, and those of its dependencies, at runtime.
 
@@ -13,13 +13,13 @@ The API combines functional and object-oriented approaches.
 (Chicken and egg...)
 
 ```php
-$absoluteVendorPath = ComposerUtils\VENDOR_DIR;
+$absoluteVendorPath = Composed\VENDOR_DIR;
 ```
 
 ### Locate the project's base directory
 
 ```php
-$absoluteProjectPath = ComposerUtils\BASE_DIR;
+$absoluteProjectPath = Composed\BASE_DIR;
 ```
 
 ### Get the authors of a specific package
@@ -27,7 +27,7 @@ $absoluteProjectPath = ComposerUtils\BASE_DIR;
 You can fetch data from the `composer.json` file of a specific package.
 
 ```php
-$authors = ComposerUtils\package_config('phpunit/phpunit', 'authors');
+$authors = Composed\package_config('phpunit/phpunit', 'authors');
 
 assert($authors === [
     [
@@ -43,10 +43,10 @@ assert($authors === [
 You can fetch data from all `composer.json` files in your project in one go.
 
 ```php
-$licenses = ComposerUtils\package_configs('license');
+$licenses = Composed\package_configs('license');
 
 assert($licenses === [
-  'joshdifabio/composer-utils' => "MIT",
+  'joshdifabio/composed' => "MIT",
   'doctrine/instantiator' => "MIT",
   'phpunit/php-code-coverage' => "BSD-3-Clause",
 ]);
@@ -55,13 +55,13 @@ assert($licenses === [
 ### Get the absolute path to a file in a package
 
 ```php
-$path = ComposerUtils\package('phpunit/phpunit')->getPath('composer.json');
+$path = Composed\package('phpunit/phpunit')->getPath('composer.json');
 ```
 
 ### Get all packages installed on your project
 
 ```php
-foreach (ComposerUtils\packages() as $packageName => $package) {
+foreach (Composed\packages() as $packageName => $package) {
     $pathToPackageConfig = $package->getPath('composer.json');
     // ...
 }
@@ -72,7 +72,7 @@ foreach (ComposerUtils\packages() as $packageName => $package) {
 You can also fetch data from the `composer.json` file located in your project root.
 
 ```php
-$projectAuthors = ComposerUtils\project_config('authors');
+$projectAuthors = Composed\project_config('authors');
 
 assert($projectAuthors === [
     [
@@ -84,16 +84,16 @@ assert($projectAuthors === [
 
 ## Installation
 
-Install Composer Utils using [composer](https://getcomposer.org/).
+Install Composed using [composer](https://getcomposer.org/).
 
 ```
-composer require joshdifabio/composer-utils
+composer require joshdifabio/composed
 ```
 
 ## Credits
 
-Credit goes to @igorw whose [get-in](https://github.com/igorw/get-in) library is partially copied into this library. Unfortunately, `igorw/get-in` requires PHP 5.4 while Composer Utils aims for PHP 5.3 compatibility.
+Credit goes to @igorw whose [get-in](https://github.com/igorw/get-in) library is partially copied into this library. Unfortunately, `igorw/get-in` requires PHP 5.4 while Composed aims for PHP 5.3 compatibility.
 
 ## License
 
-Composer Utils is released under the [MIT](https://github.com/joshdifabio/composer-utils/blob/master/LICENSE) license.
+Composed is released under the [MIT](https://github.com/joshdifabio/composed/blob/master/LICENSE) license.
