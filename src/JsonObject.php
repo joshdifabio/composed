@@ -17,14 +17,14 @@ class JsonObject
     {
         if (false === $fileContent = @file_get_contents($filePath)) {
             if (!file_exists($filePath)) {
-                throw new \RuntimeException('File not found.');
+                throw new \RuntimeException("File not found: $filePath");
             }
 
-            throw new \RuntimeException('Failed to open file.');
+            throw new \RuntimeException("Failed to open file: $filePath");
         }
 
         if (null === $data = json_decode($fileContent, true)) {
-            throw new \RuntimeException('File does not contain valid JSON.');
+            throw new \RuntimeException("File does not contain valid JSON: $filePath");
         }
 
         return self::fromArray($data);
