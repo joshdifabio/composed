@@ -53,6 +53,6 @@ class RootPackage extends AbstractPackage
 
     public function getVendorPath(string $relativePath = '') : string
     {
-        return $this->getPath($this->getVendorDir() . strlen($relativePath) ? DIRECTORY_SEPARATOR . $relativePath : '');
+        return $this->getPath($this->getVendorDir() . (strlen($relativePath) ? DIRECTORY_SEPARATOR . $relativePath : ''));
     }
 }
