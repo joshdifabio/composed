@@ -77,7 +77,7 @@ class PackageCollection implements \IteratorAggregate
      * Returns all packages sorted based on their dependencies. Each package is guaranteed to appear after all of its
      * dependencies in the collection
      */
-    public function sortByDependencies() : PackageCollection
+    public function sortByDependencies() : self
     {
         /** @var $packages Package[] */
         $packages = $this->packages;
@@ -88,7 +88,7 @@ class PackageCollection implements \IteratorAggregate
                 $dependentPackages = $package->getDependencies()->toArray();
                 if (empty(array_diff_key($dependentPackages, $sortedPackages))) {
                     // all of this packages dependencies are already in the sorted array, so it can be appended
-                    $sortedPackages[$packageName] = $packages;
+                    $sortedPackages[$packageName] = $package;
                     unset($packages[$packageName]);
                     continue(2);
                 }
@@ -96,6 +96,6 @@ class PackageCollection implements \IteratorAggregate
             throw new \LogicException('Packages have circular dependencies');
         }
 
-        return new PackageCollection($sortedPackages);
+        return new static($sortedPackages);
     }
 }
