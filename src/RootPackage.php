@@ -6,28 +6,22 @@ namespace Composed;
  */
 class RootPackage extends AbstractPackage
 {
-    private static $instance;
-
     private $packages;
 
-    /**
-     * @return RootPackage
-     */
-    public static function getInstance()
+    public function __construct(string $dirPath, JsonObject $config)
     {
-        if (null === self::$instance) {
-            self::$instance = self::createFromPath(BASE_DIR . DIRECTORY_SEPARATOR . 'composer.json');
-        }
+        parent::__construct($this, $dirPath, $config);
+    }
 
-        return self::$instance;
+    public static function createFromPath(string $dirPath) : self
+    {
+        return new static($dirPath, JsonObject::fromFilePath($dirPath . DIRECTORY_SEPARATOR . 'composer.json'));
     }
 
     /**
      * Returns all packages in the project, including the root one
-     * 
-     * @return PackageCollection
      */
-    public function getPackages()
+    public function getPackages() : PackageCollection
     {
         if (null === $this->packages) {
             $packages = array_merge(
@@ -43,10 +37,7 @@ class RootPackage extends AbstractPackage
         return $this->packages;
     }
 
-    /**
-     * @return LockFile
-     */
-    public function getLockFile()
+    public function getLockFile() : LockFile
     {
         if (null === $lockFile = parent::getLockFile()) {
             throw new \RuntimeException('Lock file not found.');
@@ -55,13 +46,13 @@ class RootPackage extends AbstractPackage
         return $lockFile;
     }
 
-    protected static function create(JsonObject $json)
+    public function getVendorDir() : string
     {
-        return new static($json, true);
+        return 'vendor';
     }
 
-    protected function getDir()
+    public function getVendorPath(string $relativePath = '') : string
     {
-        return BASE_DIR;
+        return $this->getPath($this->getVendorDir() . strlen($relativePath ? DIRECTORY_SEPARATOR . $relativePath : ''));
     }
 }

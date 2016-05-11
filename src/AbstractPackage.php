@@ -6,39 +6,26 @@ namespace Composed;
  */
 abstract class AbstractPackage
 {
+    private $dirPath;
     private $config;
-    private $isRoot;
+    private $root;
     private $lockFile;
+    private $directDependencies;
+    private $dependencies;
 
-    public function __construct(JsonObject $config, $isRoot)
+    protected function __construct(RootPackage $root, string $dirPath, JsonObject $config)
     {
+        $this->root = $root;
+        $this->dirPath = $dirPath;
         $this->config = $config;
-        $this->isRoot = $isRoot;
-    }
-
-    /**
-     * @param string $filePath Path to package's composer.json file
-     * @return Package
-     */
-    public static function createFromPath($filePath)
-    {
-        return static::create(JsonObject::createFromPath($filePath));
-    }
-
-    /**
-     * @return Package
-     */
-    public static function createFromJsonArray(array $data)
-    {
-        return static::create(JsonObject::create($data));
     }
 
     /**
      * @return null|string
      */
-    public function getName($includeVendorName = true)
+    public function getName(bool $includeVendorName = true)
     {
-        $name = $this->config->get(array('name'));
+        $name = $this->config->get(['name']);
 
         if ($includeVendorName) {
             return $name;
@@ -59,28 +46,22 @@ abstract class AbstractPackage
         return strstr($name, '/', true);
     }
 
-    /**
-     * @return boolean
-     */
-    public function isRoot()
+    public function isRoot() : bool
     {
-        return $this->isRoot;
+        return $this->root === $this;
     }
 
     /**
      * @return mixed
      */
-    public function getConfig($keys = array(), $default = null)
+    public function getConfig($keys = [], $default = null)
     {
         return $this->config->get($keys, $default);
     }
 
-    /**
-     * @return string
-     */
-    public function getPath($relativePath = '')
+    public function getPath(string $relativePath = '') : string
     {
-        return $this->getDir() . (strlen($relativePath) ? DIRECTORY_SEPARATOR . $relativePath : '');
+        return $this->dirPath . (strlen($relativePath) ? DIRECTORY_SEPARATOR . $relativePath : '');
     }
 
     /**
@@ -91,12 +72,50 @@ abstract class AbstractPackage
         if (null === $this->lockFile) {
             $filePath = $this->getPath('composer.lock');
             if (file_exists($filePath)) {
-                $this->lockFile = LockFile::createFromPath($filePath);
+                $this->lockFile = LockFile::fromFilePath($this->root, $filePath);
             }
         }
 
         return $this->lockFile;
     }
 
-    abstract protected function getDir();
+    public function directlyRequires(string $packageName) : bool
+    {
+        return null !== $this->getDirectDependencies()->getPackage($packageName);
+    }
+
+    public function requires(string $packageName) : bool
+    {
+        return null !== $this->getDependencies()->getPackage($packageName);
+    }
+
+    public function getDirectDependencies() : PackageCollection
+    {
+        if (null === $this->directDependencies) {
+            $packageNames = array_keys($this->getConfig('require', $default = []));
+            $packages = array_map(
+                function ($packageName) {
+                    $this->root->getPackages()->getPackage($packageName);
+                },
+                $packageNames
+            );
+            $this->directDependencies = new PackageCollection(array_combine($packageNames, $packages));
+        }
+
+        return $this->directDependencies;
+    }
+
+    public function getDependencies() : PackageCollection
+    {
+        if (null === $this->dependencies) {
+            $packages = [];
+            foreach ($this->getDirectDependencies() as $name => $package) {
+                $packages[$name] = $package;
+                $packages = array_merge($packages, $package->getDependencies());
+            }
+            $this->dependencies = new PackageCollection($packages);
+        }
+
+        return $this->dependencies;
+    }
 }

@@ -6,21 +6,18 @@ namespace Composed;
  */
 class Package extends AbstractPackage
 {
-    protected static function create(JsonObject $json)
+    public static function create(RootPackage $root, JsonObject $packageConfig) : self
     {
-        return new static($json, false);
+        if (null === $packageName = $packageConfig->get('name')) {
+            throw new \InvalidArgumentException('Package data must include package name');
+        }
+        $dirPath = $root->getVendorPath(str_replace('/', DIRECTORY_SEPARATOR, $packageConfig->get('name')));
+
+        return new static($root, $dirPath, $packageConfig);
     }
 
-    protected function getDir()
+    public static function fromArray(RootPackage $root, array $packageConfig) : self
     {
-        $parts = array_filter(array(
-            VENDOR_DIR,
-            $this->getName(),
-            $this->getConfig('target-dir', ''),
-        ));
-        
-        $path = implode(DIRECTORY_SEPARATOR, $parts);
-
-        return str_replace('/', DIRECTORY_SEPARATOR, $path);
+        return self::create($root, JsonObject::fromArray($packageConfig));
     }
 }

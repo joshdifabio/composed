@@ -6,33 +6,28 @@ namespace Composed;
  */
 class LockFile
 {
+    private $root;
     private $json;
     private $packages;
 
-    public function __construct(JsonObject $json)
+    public function __construct(RootPackage $root, JsonObject $json)
     {
+        $this->root = $root;
         $this->json = $json;
     }
 
-    /**
-     * @param string $filePath
-     * @return JsonObject
-     */
-    public static function createFromPath($filePath)
+    public static function fromFilePath(RootPackage $root, string $filePath) : self
     {
-        return new self(JsonObject::createFromPath($filePath));
+        return new self($root, JsonObject::fromFilePath($filePath));
     }
 
-    /**
-     * @return PackageCollection
-     */
-    public function getPackages()
+    public function getPackages() : PackageCollection
     {
         if (null === $this->packages) {
-            $packages = array();
-            $packagesData = $this->json->get(array('packages'), array());
+            $packages = [];
+            $packagesData = $this->json->get(['packages'], []);
             foreach ($packagesData as $packageData) {
-                $package = Package::createFromJsonArray($packageData);
+                $package = Package::fromArray($this->root, $packageData);
                 $packages[$package->getName()] = $package;
             }
             $this->packages = new PackageCollection($packages);
@@ -41,7 +36,7 @@ class LockFile
         return $this->packages;
     }
 
-    public function get($keys = array(), $default = null)
+    public function get($keys = [], $default = null)
     {
         return $this->json->get($keys, $default);
     }

@@ -4,10 +4,7 @@ namespace Composed;
 define(__NAMESPACE__ . '\VENDOR_DIR', Internal\findVendorDir());
 define(__NAMESPACE__ . '\BASE_DIR', Internal\findBaseDir(VENDOR_DIR));
 
-/**
- * @return PackageCollection
- */
-function packages($includeRoot = true)
+function packages($includeRoot = true) : PackageCollection
 {
     return $includeRoot ? project()->getPackages() : project()->getLockFile()->getPackages();
 }
@@ -26,23 +23,20 @@ function package($name, $graceful = false)
     return $package;
 }
 
-/**
- * @return array
- */
-function package_configs($keys = array(), $default = null)
+function package_configs($keys = [], $default = null) : array
 {
     /**
      * If $default is not explicitly provided, it should not be passed to Package::getConfig(),
      * hence not simply calling getConfig($keys, $default), as explicitly passing $default = null
      * to getConfig() is different to omitting it
      */
-    return call_user_func_array(array(packages(), 'getConfig'), func_get_args());
+    return packages()->getConfig(...func_get_args());
 }
 
 /**
  * @return mixed
  */
-function package_config($packageName, $keys = array(), $default = null)
+function package_config(string $packageName, $keys = [], $default = null)
 {
     return package($packageName)->getConfig($keys, $default);
 }
@@ -50,15 +44,20 @@ function package_config($packageName, $keys = array(), $default = null)
 /**
  * @return mixed
  */
-function project_config($keys = array(), $default = null)
+function project_config($keys = [], $default = null)
 {
     return project()->getConfig($keys, $default);
 }
 
-/**
- * @return RootPackage
- */
-function project()
+function project(RootPackage $assign = null) : RootPackage
 {
-    return RootPackage::getInstance();
+    static $project;
+
+    if ($assign) {
+        $project = $assign;
+    } elseif (!$project) {
+        $project = RootPackage::createFromPath(BASE_DIR . \DIRECTORY_SEPARATOR . 'composer.json');
+    }
+
+    return $project;
 }

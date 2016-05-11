@@ -13,11 +13,7 @@ class JsonObject
         $this->data = $data;
     }
 
-    /**
-     * @param string $filePath
-     * @return JsonObject
-     */
-    public static function createFromPath($filePath)
+    public static function fromFilePath(string $filePath) : self
     {
         if (false === $fileContent = @file_get_contents($filePath)) {
             if (!file_exists($filePath)) {
@@ -31,27 +27,18 @@ class JsonObject
             throw new \RuntimeException('File does not contain valid JSON.');
         }
 
-        return self::create($data);
+        return self::fromArray($data);
     }
 
-    /**
-     * @return JsonObject
-     */
-    public static function create(array $data)
+    public static function fromArray(array $data) : self
     {
         return new self($data);
     }
 
-    /**
-     * This method is copied from igorw/get-in with minor changes. At present this lib supports
-     * PHP 5.3 but igorw/get-in does not
-     * 
-     * @link https://github.com/igorw/get-in/blob/master/src/get_in.php
-     */
-    public function get($keys = array(), $default = null)
+    public function get($keys = [], $default = null)
     {
         if (!is_array($keys)) {
-            $keys = array($keys);
+            $keys = [$keys];
         }
         
         if (!$keys) {
@@ -61,7 +48,7 @@ class JsonObject
         return $this->deepGet($this->data, $keys, $default);
     }
 
-    private function deepGet(array $current, array $keys = array(), $default = null)
+    private function deepGet(array $current, array $keys = [], $default = null)
     {
         foreach ($keys as $key) {
             if (!is_array($current) || !array_key_exists($key, $current)) {
