@@ -56,7 +56,7 @@ function project(RootPackage $assign = null) : RootPackage
     if ($assign) {
         $project = $assign;
     } elseif (!$project) {
-        $project = RootPackage::createFromPath(BASE_DIR . \DIRECTORY_SEPARATOR . 'composer.json');
+        $project = RootPackage::createFromPath(BASE_DIR);
     }
 
     return $project;

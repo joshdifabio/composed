@@ -85,8 +85,8 @@ class PackageCollection implements \IteratorAggregate
 
         while (!empty($packages)) {
             foreach ($packages as $packageName => $package) {
-                $dependentPackageNames = $package->getDependencies()->getPackageNames();
-                if (empty(array_diff_key($dependentPackageNames, $sortedPackages))) {
+                $dependentPackages = $package->getDependencies()->toArray();
+                if (empty(array_diff_key($dependentPackages, $sortedPackages))) {
                     // all of this packages dependencies are already in the sorted array, so it can be appended
                     $sortedPackages[$packageName] = $packages;
                     unset($packages[$packageName]);

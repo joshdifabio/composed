@@ -93,13 +93,15 @@ abstract class AbstractPackage
     {
         if (null === $this->directDependencies) {
             $packageNames = array_keys($this->getConfig('require', $default = []));
-            $packages = array_map(
+            $packages = @array_map(
                 function ($packageName) {
-                    $this->root->getPackages()->getPackage($packageName);
+                    return $this->root->getPackages()->getPackage($packageName);
                 },
                 $packageNames
             );
-            $this->directDependencies = new PackageCollection(array_combine($packageNames, $packages));
+            $packages = array_combine($packageNames, $packages);
+            $packages = array_filter($packages);
+            $this->directDependencies = new PackageCollection($packages);
         }
 
         return $this->directDependencies;
@@ -109,9 +111,10 @@ abstract class AbstractPackage
     {
         if (null === $this->dependencies) {
             $packages = [];
+            /** @var Package $package */
             foreach ($this->getDirectDependencies() as $name => $package) {
                 $packages[$name] = $package;
-                $packages = array_merge($packages, $package->getDependencies());
+                $packages = array_merge($packages, $package->getDependencies()->toArray());
             }
             $this->dependencies = new PackageCollection($packages);
         }
