@@ -36,6 +36,21 @@ class LockFile
         return $this->packages;
     }
 
+    public function getDevPackages() : PackageCollection
+    {
+        if (null === $this->packages) {
+            $packages = [];
+            $packagesData = $this->json->get(['packages-dev'], []);
+            foreach ($packagesData as $packageData) {
+                $package = Package::fromArray($this->root, $packageData);
+                $packages[$package->getName()] = $package;
+            }
+            $this->packages = new PackageCollection($packages);
+        }
+
+        return $this->packages;
+    }
+
     public function get($keys = [], $default = null)
     {
         return $this->json->get($keys, $default);
