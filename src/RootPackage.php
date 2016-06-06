@@ -7,6 +7,7 @@ namespace Composed;
 class RootPackage extends AbstractPackage
 {
     private $packages;
+    private $installedPackagesFile;
 
     public function __construct(string $dirPath, JsonObject $config)
     {
@@ -28,7 +29,7 @@ class RootPackage extends AbstractPackage
                 array(
                     $this->getName() => $this,
                 ),
-                $this->getLockFile()->getPackages()->toArray()
+                $this->getInstalledPackagesFile()->getPackages()->toArray()
             );
 
             $this->packages = new PackageCollection($packages);
@@ -44,6 +45,18 @@ class RootPackage extends AbstractPackage
         }
 
         return $lockFile;
+    }
+
+    public function getInstalledPackagesFile() : InstalledPackagesFile
+    {
+        if (null === $this->installedPackagesFile) {
+            $filePath = $this->getPath('vendor/composer/installed.json');
+            if (file_exists($filePath)) {
+                $this->installedPackagesFile = InstalledPackagesFile::fromFilePath($this, $filePath);
+            }
+        }
+
+        return $this->installedPackagesFile;
     }
 
     public function getVendorDir() : string
